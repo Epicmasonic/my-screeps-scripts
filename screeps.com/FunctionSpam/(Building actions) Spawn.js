@@ -16,7 +16,7 @@ module.exports = {
         console.log(!spawn.Spawning && spawn.store[RESOURCE_ENERGY] >= 300 && harvesters.length < maxHarvesters);
         */
         
-        if (!spawn.Spawning && spawn.store[RESOURCE_ENERGY] >= 300 && harvesters.length < maxHarvesters) {
+        if (!spawn.spawning && spawn.store[RESOURCE_ENERGY] >= 300 && harvesters.length < maxHarvesters) {
             let escape;
             while (true) {
                 escape = true;
