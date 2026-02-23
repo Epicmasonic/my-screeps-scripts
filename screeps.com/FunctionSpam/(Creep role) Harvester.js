@@ -8,13 +8,25 @@ module.exports = {
             creepMemory.changeAction(creep, "Mine Energy", "⛏️⚡", false)
             creepResource.extractSource(creep)
         }
-        else if (Game.spawns['Spawn1'].store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-            creepMemory.changeAction(creep, "Fuel Spawn", "⚡🏠", false)
-            creepResource.fuelStructure(creep, Game.spawns['Spawn1'])
-        }
         else {
-            creepMemory.changeAction(creep, "Fuel Room", "⚡🧠", false)
-            creepResource.fuelRoom(creep)
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                }
+            )
+
+            if (targets.length > 0) {
+                creepMemory.changeAction(creep, "Fuel Spawn", "⚡🏠", false)
+                let closestTarget = creep.pos.findClosestByPath(targets)
+                creepResource.fuelStructure(creep, closestTarget)
+            }
+            else {
+                creepMemory.changeAction(creep, "Fuel Room", "⚡🧠", false)
+                creepResource.fuelRoom(creep)
+            }
         }
 	}
 };
