@@ -1,3 +1,5 @@
+// This is a test
+
 const harvester = require('(Creep role) Harvester');
 const summon = require('(Building actions) Spawn');
 const icon = require('(Building actions) Spawn Icons');
