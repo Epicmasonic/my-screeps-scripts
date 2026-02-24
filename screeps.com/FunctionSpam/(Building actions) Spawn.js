@@ -1,6 +1,7 @@
 const harvestBody = [MOVE,MOVE,WORK,CARRY,MOVE]
 const constructBody = [WORK,WORK,CARRY,MOVE]
 
+// Create a build order
 var buildOrder = ['Harvest','Construct'];
 
 for (let spawn in Game.spawns) {
@@ -23,19 +24,25 @@ for (let spawn in Game.spawns) {
 module.exports = {
 	/** @param {Creep} creep **/
 	run: function(spawn) {
-		/*
+		// Display the build order
+		buildOrderText = 'Planned Build Order: ';
 	    for (let i in buildOrder) {
-			if (buildOrder[i] == 'Harvest') {
-				spawn.room.visual.text(
-					'⛏️',
-					i, 
-					2.25, 
-					{opacity: 0.8});
-				console.log('Harvest ' + i);
+			switch (buildOrder[i]) {
+				case 'Harvest':
+					buildOrderText += '⛏️';
+					break;
+				case 'Construct':
+					buildOrderText += '🛠️';
+					break;
 			}
 	    }
-		*/
+		spawn.room.visual.text(
+			buildOrderText,
+			-0.25, 
+			3.25, 
+			{align: 'left', opacity: 0.8});
 
+		// Display the current energy
 		totalEnergyOwned = spawn.store[RESOURCE_ENERGY];
 		totalEnergyCapacity = spawn.store.getCapacity(RESOURCE_ENERGY);
 		for (var name of spawn.room.find(FIND_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_EXTENSION })) {
@@ -49,54 +56,76 @@ module.exports = {
 				spawn.pos.y + 1.25, 
 				{opacity: 0.8});
 
-		if (!spawn.spawning && totalEnergyOwned >= 300) {
-			let harvestersMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Harvest').length;
-			let harvestersWanted = 0;
-			let constructorsMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Construct').length;
-			let constructorsWanted = 0;
-			
-			for (let role of buildOrder) {
-				switch (role) {
-					case 'Harvest':
-						harvestersWanted += 1;
-						if (harvestersMade < harvestersWanted) {
-							let escape = true;
-							let number = 1;
-							for (let name in Game.creeps) {
-								if (name == role + '_' + number) {
-									escape = false;
-									number++;
-								}
-								if (escape) {
-									break;
-								}
-							}
+		// Find what role is up next
+		let harvestersMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Harvest').length;
+		let harvestersWanted = 0;
+		let constructorsMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Construct').length;
+		let constructorsWanted = 0;
 
-							spawn.spawnCreep(harvestBody, role + '_' + number, {memory: {role: role}});
-							return;
-						}
-						break;
-					case 'Construct':
-						constructorsWanted += 1;
-						if (constructorsMade < constructorsWanted) {
-							let escape = true;
-							let number = 1;
-							for (let name in Game.creeps) {
-								if (name == role + '_' + number) {
-									escape = false;
-									number++;
-								}
-								if (escape) {
-									break;
-								}
-							}
-
-							spawn.spawnCreep(constructBody, role + '_' + number, {memory: {role: role}});
-							return;
-						}
-						break;
+		let upNext = '';
+		let loops = 0;
+		buildLoop: for (let role of buildOrder) {
+			switch (role) {
+				case 'Harvest':
+					harvestersWanted += 1;
+					if (harvestersMade < harvestersWanted) {
+						upNext = role;
+						break buildLoop;
 					}
+					break;
+				case 'Construct':
+					constructorsWanted += 1;
+					if (constructorsMade < constructorsWanted) {
+						upNext = role;
+						break buildLoop;
+					}
+					break;
+				}
+			loops++;
+		}
+		
+		// Display what roles are still needed
+		upNextText = '';
+		switch (buildOrder[i]) {
+			case 'Harvest':
+				upNextText += '⛏️';
+				break;
+			case 'Construct':
+				upNextText += '🛠️';
+				break;
+		}
+				
+		spawn.room.visual.text(
+			upNextText,
+			-0.25, 
+			4.25, 
+			{align: 'left', opacity: 0.8});
+
+		// Actually spawn the creeps
+		if (!spawn.spawning && totalEnergyOwned >= 300) {
+			let escape = true;
+			let number = 1;
+			for (let name in Game.creeps) {
+				if (name == upNext + '_' + number) {
+					escape = false;
+					number++;
+				}
+				if (escape) {
+					break;
+				}
 			}
+
+			body = [];
+			switch (upNext) {
+				case 'Harvest':
+					body = harvestBody;
+					break;
+				case 'Construct':
+					body = constructBody;
+					break;
+			}
+
+			spawn.spawnCreep(body, upNext + '_' + number, {memory: {role: upNext}});
 		}
 	}
 };
