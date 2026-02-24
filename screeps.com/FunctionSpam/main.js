@@ -1,7 +1,7 @@
 const harvester = require('(Creep role) Harvester');
 const summon = require('(Building actions) Spawn');
 const icon = require('(Building actions) Spawn Icons');
-// const target = require('(Building actions) Tower');
+const target = require('(Building actions) Tower');
 
 module.exports.loop = function () {
 	if (Game.cpu.bucket >= 10000) {

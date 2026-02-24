@@ -21,10 +21,29 @@ module.exports = {
 	run: function(tower, structures, goodGuys, badGuys) {
 		if (badGuys.length) {
 			tower.attack(tower.pos.findClosestByRange(badGuys));
-		} else if (goodGuys.length) {
-			tower.heal(findWeakest(tower, goodGuys));
-		} else if (structures.length) {
-			tower.repair(findWeakest(tower, structures));
-		} 
+		} else {
+			needHealing = false;
+			for (var goodGuy of goodGuys) {
+				if (goodGuy.hits < goodGuy.hitsMax) {
+					needHealing = true;
+					break;
+				}
+			}
+			if (needHealing) {
+				tower.heal(findWeakest(tower, goodGuys));
+			} else {
+				needHealing = false;
+				for (var structure of structures) {
+					if (structure.hits < structure.hitsMax) {
+						needHealing = true;
+						break;
+					}
+				}
+		
+				if (needHealing) {
+					tower.repair(findWeakest(tower, structures));
+				}
+			}
+		}
 	}
 };
