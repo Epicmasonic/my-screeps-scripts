@@ -75,6 +75,7 @@ module.exports = {
 							spawn.spawnCreep(harvestBody, role + '_' + number, {memory: {role: role}});
 							return;
 						}
+						break;
 					case 'Construct':
 						constructorsWanted += 1;
 						if (constructorsMade < constructorsWanted) {
@@ -93,6 +94,7 @@ module.exports = {
 							spawn.spawnCreep(constructBody, role + '_' + number, {memory: {role: role}});
 							return;
 						}
+						break;
 					}
 			}
 		}
