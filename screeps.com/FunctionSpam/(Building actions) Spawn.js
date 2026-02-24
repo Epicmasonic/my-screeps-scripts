@@ -1,6 +1,23 @@
 const harvestBody = [MOVE,MOVE,WORK,CARRY,MOVE]
 
-var buildOrder = ['Harvest','Harvest','Harvest','Harvest'];
+var buildOrder = ['Harvest'];
+
+for (let spawn in Game.spawns) {
+	spawn = Game.spawns[spawn];
+
+	for (let source of spawn.room.find(FIND_SOURCES)) {
+		for (let x = source.pos.x - 1; x <= source.pos.x + 1; x++) {
+			for (let y = source.pos.y - 1; y <= source.pos.y + 1; y++) {
+				if (x == source.pos.x && y == source.pos.y) {
+					continue;
+				}
+				if (spawn.room.getTerrain().get(x, y) != TERRAIN_MASK_WALL) {
+					buildOrder.push('Harvest');
+				}
+			}
+		}
+	}
+}
 
 module.exports = {
 	/** @param {Creep} creep **/
@@ -22,14 +39,14 @@ module.exports = {
 			let harvestersMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Harvest').length;
 			let harvestersWanted = 0;
 			
-			for (var role of buildOrder) {
+			for (let role of buildOrder) {
 				switch (role) {
 					case 'Harvest':
 						harvestersWanted += 1;
 						if (harvestersMade < harvestersWanted) {
 							let escape = true;
 							let number = 1;
-							for (var name in Game.creeps) {
+							for (let name in Game.creeps) {
 								if (name == 'Harvest_' + number) {
 									escape = false;
 									number++;
