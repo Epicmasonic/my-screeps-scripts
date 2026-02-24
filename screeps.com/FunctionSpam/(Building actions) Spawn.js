@@ -86,15 +86,21 @@ module.exports = {
 		
 		// Display what roles are still needed
 		upNextText = '';
-		switch (buildOrder[i]) {
-			case 'Harvest':
-				upNextText += '⛏️';
-				break;
-			case 'Construct':
-				upNextText += '🛠️';
-				break;
+		if (loops >= buildOrder.length) {
+			upNextText = 'All Creeps Spawned!';
+		} else {
+			upNextText = 'Up Next: (' + loops + ' / ' + buildOrder.length + ') ';
+			for (let i = loops; i < buildOrder.length; i++) {
+				switch (buildOrder[i]) {
+					case 'Harvest':
+						upNextText += '⛏️';
+						break;
+					case 'Construct':
+						upNextText += '🛠️';
+						break;
+				}
+			}
 		}
-				
 		spawn.room.visual.text(
 			upNextText,
 			-0.25, 
