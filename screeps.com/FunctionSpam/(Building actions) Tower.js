@@ -1,4 +1,3 @@
-/*
 function findWeakest(tower, targets) {
 	let highScore = 0;
 	let weakestTargets = [];
@@ -29,4 +28,3 @@ module.exports = {
 		} 
 	}
 };
-*/

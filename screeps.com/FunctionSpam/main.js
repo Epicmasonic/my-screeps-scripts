@@ -35,7 +35,6 @@ module.exports.loop = function () {
 		}
 	}
 	
-	/*
 	for (var name in Game.rooms) {
 		var room = Game.rooms[name];
 
@@ -47,5 +46,4 @@ module.exports.loop = function () {
 			target.run(tower, structures, goodGuys, badGuys);
 		}
 	}
-	*/
 }
