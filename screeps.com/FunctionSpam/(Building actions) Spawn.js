@@ -1,6 +1,7 @@
 const harvestBody = [MOVE,MOVE,WORK,CARRY,MOVE]
+const constructBody = [WORK,WORK,CARRY,MOVE]
 
-var buildOrder = ['Harvest'];
+var buildOrder = ['Harvest','Construct'];
 
 for (let spawn in Game.spawns) {
 	spawn = Game.spawns[spawn];
@@ -51,6 +52,8 @@ module.exports = {
 		if (!spawn.spawning && totalEnergyOwned >= 300) {
 			let harvestersMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Harvest').length;
 			let harvestersWanted = 0;
+			let constructorsMade = _.filter(Game.creeps, (creep) => creep.memory.role == 'Construct').length;
+			let constructorsWanted = 0;
 			
 			for (let role of buildOrder) {
 				switch (role) {
@@ -60,7 +63,7 @@ module.exports = {
 							let escape = true;
 							let number = 1;
 							for (let name in Game.creeps) {
-								if (name == 'Harvest_' + number) {
+								if (name == role + '_' + number) {
 									escape = false;
 									number++;
 								}
@@ -69,7 +72,25 @@ module.exports = {
 								}
 							}
 
-							spawn.spawnCreep(harvestBody, 'Harvest_' + number, {memory: {role: role}});
+							spawn.spawnCreep(harvestBody, role + '_' + number, {memory: {role: role}});
+							return;
+						}
+					case 'Construct':
+						constructorsWanted += 1;
+						if (constructorsMade < constructorsWanted) {
+							let escape = true;
+							let number = 1;
+							for (let name in Game.creeps) {
+								if (name == role + '_' + number) {
+									escape = false;
+									number++;
+								}
+								if (escape) {
+									break;
+								}
+							}
+
+							spawn.spawnCreep(constructBody, role + '_' + number, {memory: {role: role}});
 							return;
 						}
 					}
