@@ -22,6 +22,19 @@ for (let spawn in Game.spawns) {
 module.exports = {
 	/** @param {Creep} creep **/
 	run: function(spawn) {
+		/*
+	    for (let i in buildOrder) {
+			if (buildOrder[i] == 'Harvest') {
+				spawn.room.visual.text(
+					'⛏️',
+					i, 
+					2.25, 
+					{opacity: 0.8});
+				console.log('Harvest ' + i);
+			}
+	    }
+		*/
+
 		totalEnergyOwned = spawn.store[RESOURCE_ENERGY];
 		totalEnergyCapacity = spawn.store.getCapacity(RESOURCE_ENERGY);
 		for (var name of spawn.room.find(FIND_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_EXTENSION })) {
