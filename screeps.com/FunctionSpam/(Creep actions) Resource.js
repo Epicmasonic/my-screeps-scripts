@@ -10,6 +10,11 @@ module.exports = {
 			creep.moveTo(structure);
 		}
 	},
+	buildStructure: function(creep, structure) {
+		if (creep.build(structure) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(structure);
+		}
+	},
 	fuelRoom: function(creep) {
 		if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(creep.room.controller);

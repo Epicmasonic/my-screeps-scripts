@@ -1,6 +1,9 @@
 const harvester = require('(Creep role) Harvester');
+const constructor = require('(Creep role) Constuctor');
+
 const summon = require('(Building actions) Spawn');
 const icon = require('(Building actions) Spawn Icons');
+
 const target = require('(Building actions) Tower');
 
 module.exports.loop = function () {
@@ -17,8 +20,13 @@ module.exports.loop = function () {
 
 	for (var name in Game.creeps) {
 		var creep = Game.creeps[name];
-		if (creep.memory.role == 'Harvest') {
-			harvester.run(creep);
+		switch (creep.memory.role) {
+			case 'Harvest':
+				harvester.run(creep);
+				break;
+			case 'Construct':
+				constructor.run(creep);
+				break;
 		}
 	}
 	
