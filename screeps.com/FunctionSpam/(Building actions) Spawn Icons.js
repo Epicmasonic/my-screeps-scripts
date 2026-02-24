@@ -1,5 +1,3 @@
-const harvesterIcon = '⛏️';
-
 module.exports = {
 	run: function(spawn) {
 		let role = spawn.spawning.name.split('_')[0];
