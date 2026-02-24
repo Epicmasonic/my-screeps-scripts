@@ -85,7 +85,7 @@ module.exports = {
 		}
 		
 		// Display what roles are still needed
-		upNextText = '';
+		upNextText = 'Up Next: ';
 		switch (buildOrder[i]) {
 			case 'Harvest':
 				upNextText += '⛏️';
