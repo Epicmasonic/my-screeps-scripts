@@ -21,6 +21,8 @@ for (let spawn in Game.spawns) {
 	}
 }
 
+buildOrder.push('Construct');
+
 module.exports = {
 	/** @param {Creep} creep **/
 	run: function(spawn) {
@@ -85,14 +87,19 @@ module.exports = {
 		}
 		
 		// Display what roles are still needed
-		upNextText = 'Up Next: ';
-		switch (buildOrder[i]) {
+		upNextText = '';
+		switch (buildOrder[loops]) {
 			case 'Harvest':
 				upNextText += '⛏️';
 				break;
 			case 'Construct':
 				upNextText += '🛠️';
 				break;
+		}
+		if (upNextText == '') {
+			upNextText = 'Up Next: None';
+		} else {
+			upNextText = 'Up Next: ' + upNextText + ' +' + (harvestersWanted - harvestersMade + constructorsWanted - constructorsMade - 1);
 		}
 				
 		spawn.room.visual.text(
@@ -115,7 +122,7 @@ module.exports = {
 				}
 			}
 
-			body = [];
+			let body = [];
 			switch (upNext) {
 				case 'Harvest':
 					body = harvestBody;
