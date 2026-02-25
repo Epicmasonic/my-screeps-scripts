@@ -1,9 +1,16 @@
+const wallMaxHits = 150000;
+
 function findWeakest(tower, targets) {
 	let highScore = 0;
 	let weakestTargets = [];
 
 	for (var target of targets) {
-		let score = target.hitsMax - target.hits;
+		let maxHits = target.hitsMax;
+		if (target.structureType == STRUCTURE_WALL) {
+			maxHits = Math.min(maxHits, wallMaxHits);
+		}
+
+		let score = maxHits - target.hits;
 
 		if (score > highScore) {
 			highScore = score;
@@ -38,7 +45,12 @@ module.exports = {
 
 		needHealing = false;
 		for (var structure of structures) {
-			if (structure.hits < structure.hitsMax) {
+			let maxHits = structure.hitsMax;
+			if (structure.structureType == STRUCTURE_WALL) {
+				maxHits = Math.min(maxHits, wallMaxHits);
+			}
+
+			if (structure.hits < maxHits) {
 				needHealing = true;
 				break;
 			}
