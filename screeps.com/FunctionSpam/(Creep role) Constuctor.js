@@ -6,7 +6,7 @@ module.exports = {
 		if ((creep.memory.action != "Mine Energy" && creep.store.getUsedCapacity(RESOURCE_ENERGY) == 0) || (creep.memory.action == "Mine Energy" && creep.store.getFreeCapacity(RESOURCE_ENERGY) > 0)) {
 		// Mine Energy
 			creepMemory.changeAction(creep, "Mine Energy", "⛏️⚡", false)
-			creepResource.extractSource(creep)
+			creepResource.extractEnergy(creep)
 		}
 		else {
 			var targets = creep.room.find(FIND_CONSTRUCTION_SITES)

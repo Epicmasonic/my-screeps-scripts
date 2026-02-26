@@ -96,10 +96,10 @@ module.exports = {
 				upNextText += '🛠️';
 				break;
 		}
-		if (upNextText == '') {
-			upNextText = 'Up Next: None';
-		} else {
+		if (upNextText) {
 			upNextText = 'Up Next: ' + upNextText;
+		} else {
+			upNextText = 'Up Next: None';
 		}
 				
 		spawn.room.visual.text(
@@ -109,7 +109,7 @@ module.exports = {
 			{align: 'left', opacity: 0.8});
 
 		// Actually spawn the creeps
-		if (!spawn.spawning && totalEnergyOwned >= 300) {
+		if (upNext && !spawn.spawning && totalEnergyOwned >= 300) {
 			let number = 1;
 			while (true) {
 				if (Game.creeps[upNext + '_' + number]) {

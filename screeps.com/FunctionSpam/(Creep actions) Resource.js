@@ -5,6 +5,30 @@ module.exports = {
 			creep.moveTo(source);
 		}
 	},
+	extractEnergy: function(creep) {
+		let targets = creep.room.find(FIND_SOURCES_ACTIVE);
+		targets.concat(creep.room.find(FIND_RUINS, {
+				filter: (ruin) => {
+						return ruin.store.getUsedCapacity() > 0;
+					}
+				}
+			)
+		);
+
+		let target = creep.pos.findClosestByPath(targets);
+		if (target) {
+			if (target instanceof Source) {
+				if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(target);
+				}
+			} else {
+				console.log('That code works! :D');
+				if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(target);
+				}
+			}
+		}
+	},
 	fuelStructure: function(creep, structure) {
 		if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(structure);
