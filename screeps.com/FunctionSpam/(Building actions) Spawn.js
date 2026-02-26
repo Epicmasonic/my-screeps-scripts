@@ -99,7 +99,7 @@ module.exports = {
 		if (upNextText == '') {
 			upNextText = 'Up Next: None';
 		} else {
-			upNextText = 'Up Next: ' + upNextText + ' +' + (harvestersWanted - harvestersMade + constructorsWanted - constructorsMade - 1);
+			upNextText = 'Up Next: ' + upNextText;
 		}
 				
 		spawn.room.visual.text(
@@ -110,15 +110,11 @@ module.exports = {
 
 		// Actually spawn the creeps
 		if (!spawn.spawning && totalEnergyOwned >= 300) {
-			let escape = true;
 			let number = 1;
 			for (let name in Game.creeps) {
-				if (name == upNext + '_' + number) {
-					escape = false;
+			    let creepRole = name.substring(0,name.indexOf('_'))
+				if (creepRole == upNext && name == upNext + '_' + number) {
 					number++;
-				}
-				if (escape) {
-					break;
 				}
 			}
 
@@ -131,7 +127,7 @@ module.exports = {
 					body = constructBody;
 					break;
 			}
-
+            
 			spawn.spawnCreep(body, upNext + '_' + number, {memory: {role: upNext}});
 		}
 	}

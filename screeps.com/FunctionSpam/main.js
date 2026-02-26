@@ -54,4 +54,24 @@ module.exports.loop = function () {
 			target.run(tower, structures, goodGuys, badGuys);
 		}
 	}
+
+	if (Game.creeps['Wander_1']) {
+		let myCreep = Game.creeps['Wander_1'];
+
+		if (myCreep.room.name != 'E45S49') {
+			switch (myCreep.claimController(myCreep.room.controller)) {
+				case ERR_NOT_IN_RANGE:
+					myCreep.moveTo(myCreep.room.controller);
+					break;
+				case ERR_GCL_NOT_ENOUGH:
+				case ERR_INVALID_TARGET:
+					myCreep.reserveController(myCreep.room.controller);
+					break;
+			}
+		} else {
+			myCreep.moveTo(myCreep.pos.findClosestByPath(FIND_EXIT_BOTTOM));
+		}
+	} else {
+		Game.spawns['Spawn_1'].spawnCreep([ATTACK,MOVE,MOVE,CLAIM], 'Wander_1');
+	}
 }
