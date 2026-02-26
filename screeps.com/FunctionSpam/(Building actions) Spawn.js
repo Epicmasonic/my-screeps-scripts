@@ -111,10 +111,11 @@ module.exports = {
 		// Actually spawn the creeps
 		if (!spawn.spawning && totalEnergyOwned >= 300) {
 			let number = 1;
-			for (let name in Game.creeps) {
-			    let creepRole = name.substring(0,name.indexOf('_'))
-				if (creepRole == upNext && name == upNext + '_' + number) {
+			while (true) {
+				if (Game.creeps[upNext + '_' + number]) {
 					number++;
+				} else {
+					break;
 				}
 			}
 
@@ -128,6 +129,7 @@ module.exports = {
 					break;
 			}
             
+            console.log(spawn.name + ' is trying to spawn ' + upNext + '_' + number);
 			spawn.spawnCreep(body, upNext + '_' + number, {memory: {role: upNext}});
 		}
 	}
